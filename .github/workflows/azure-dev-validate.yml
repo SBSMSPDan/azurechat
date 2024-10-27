@@ -18,34 +18,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Setup Azure CLI
+      - name: Build Bicep for linting
         uses: azure/CLI@v1
         with:
-          inlineScript: |
-            set -x  # Enable script debugging
-            az config set bicep.use_binary_from_path=false
-            az bicep build -f infra/main.bicep --stdout
-            set +x  # Disable script debugging
-
-      - name: Debug Bicep Build
-        run: |
-          echo "Listing files in infra directory"
-          ls -la infra
-          echo "Checking Bicep version"
-          az bicep version
+          inlineScript: az config set bicep.use_binary_from_path=false && az bicep build -f infra/main.bicep --stdout
 
       - name: Run Microsoft Security DevOps Analysis
         uses: microsoft/security-devops-action@preview
         id: msdo
         continue-on-error: true
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-    # Add any additional configurations as needed
-    # For example, to specify a policy file:
-    # policy-file: '.github/security-devops-policy.yml'
-          # Add any necessary configuration here
+          tools: templateanalyzer
+        env:
+          GDN_TEMPLATEANALYZER_VERBOSE: 1
+
+      - name: Upload alerts to Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}

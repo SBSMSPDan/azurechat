@@ -16,7 +16,7 @@ The GitHub workflow requires a secret named `AZURE_CREDENTIALS` to authenticate 
 
    ```console
    az ad sp create-for-rbac
-      --name azurechatsbs --role contributor --scopes /subscriptions/4f637b3d-85f4-453d-ad08-98a101db4e4f/resourceGroups/rg-ai-services --sdk-auth --output json
+      --name <NAME OF THE CREDENTIAL> --role contributor --scopes /subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP> --sdk-auth --output json
    ```
 
 2. Copy the JSON output from the command.
@@ -33,7 +33,7 @@ Under the same repository secrets add a new variable `AZURE_APP_SERVICE_NAME` to
 
 ### 3. Run GitHub Actions
 
-Once the secrets are configured, the GitHub Actions will be triggered for every code push to the repository. Alternatively, you can manually run the workflow by clicking on the "Run Workflow" button in the Actions tab in GitHub.   
+Once the secrets are configured, the GitHub Actions will be triggered for every code push to the repository. Alternatively, you can manually run the workflow by clicking on the "Run Workflow" button in the Actions tab in GitHub.
 
 ![Workflow screenshot](/docs/images/runworkflow.png)
 
