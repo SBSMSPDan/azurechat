@@ -16,7 +16,7 @@ The GitHub workflow requires a secret named `AZURE_CREDENTIALS` to authenticate 
 
    ```console
    az ad sp create-for-rbac
-      --name <NAME OF THE CREDENTIAL> --role contributor --scopes /subscriptions/<SUBSCRIPTION ID>/resourceGroups/<RESOURCE GROUP> --sdk-auth --output json
+      --name azurechatsbs --role contributor --scopes /subscriptions/3c3b4de5-6f22-48ab-90a8-d158226e57b9/resourceGroups/rg-ai-services --sdk-auth --output json
    ```
 
 2. Copy the JSON output from the command.
