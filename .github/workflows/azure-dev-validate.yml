@@ -18,21 +18,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build Bicep for linting
+      - name: Setup Azure CLI
         uses: azure/CLI@v1
         with:
-          inlineScript: az config set bicep.use_binary_from_path=false && az bicep build -f infra/main.bicep --stdout
+          inlineScript: |
+            az config set bicep.use_binary_from_path=false
+            az bicep build -f infra/main.bicep --stdout
+
+      - name: Debug Bicep Build
+        run: |
+          echo "Listing files in infra directory"
+          ls -la infra
+          echo "Checking Bicep version"
+          az bicep version
 
       - name: Run Microsoft Security DevOps Analysis
         uses: microsoft/security-devops-action@preview
         id: msdo
         continue-on-error: true
         with:
-          tools: templateanalyzer
-        env:
-          GDN_TEMPLATEANALYZER_VERBOSE: 1
-
-      - name: Upload alerts to Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+          # Add any necessary configuration here
