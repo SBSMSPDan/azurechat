@@ -36,5 +36,4 @@ jobs:
         uses: microsoft/security-devops-action@preview
         id: msdo
         continue-on-error: true
-        with:
-          # Add any necessary configuration here
+        # Add any necessary configuration here
